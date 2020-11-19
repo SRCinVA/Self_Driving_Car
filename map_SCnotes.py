@@ -39,3 +39,17 @@ class Network(nn.Module):   #Network inherits from the NN module
         x = F.relu(self.fc1(state)) # x represents the hidden neurons and applies the rectifier (ReLu) function to them. Then we have to pass in "state" to go from input to hidden neurons.
         q_values = self.fc2(x)      # these are q_values from the output neurons, using the "x" from the hidden layer in the previous line.
         return q_values             # returns the q_values for each possible action.
+
+# create a class for experience replay aspect
+# this will help us understand 100 states in the past (!!), creating a long-term memory. It helps Deep Q learning.
+# then it takes random samples to make the next move
+
+class ReplayMemory(object):  # Question: what exactly does 'object' refer to here?
+
+    def __init__(self, capacity): #capacity is 100, based on our choice to keep 100 last transitions.
+        self.capacity = capacity
+        self.memory = []          # this initializes the memory, and from there, the list will be added to
+
+    def push(): # to ensure the memory doesn't contain more than 100 transitions.
+
+    
