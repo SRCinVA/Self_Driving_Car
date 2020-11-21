@@ -50,6 +50,10 @@ class ReplayMemory(object):  # Question: what exactly does 'object' refer to her
         self.capacity = capacity
         self.memory = []          # this initializes the memory, and from there, the list will be added to
 
-    def push(): # to ensure the memory doesn't contain more than 100 transitions.
-
+    # the push function will (1.) append a new transition to the memory and (2.) ensure that the memory has 100 transitions 
+    def push(self, event):
+        self.memory.append(event) # Question: when will we define the event here in the code ...?
+        if len(self.memory) > self.capacity:
+            del self.memory[0]    # delete the oldest memory (which naturally lives at index [0])
     
+    def sample():
