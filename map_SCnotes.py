@@ -56,4 +56,11 @@ class ReplayMemory(object):  # Question: what exactly does 'object' refer to her
         if len(self.memory) > self.capacity:
             del self.memory[0]    # delete the oldest memory (which naturally lives at index [0])
     
-    def sample():
+    def sample(self, batch_size):
+        samples = zip(*random.sample(self.memory, batch_size))  # we take random samples from the memory that have a fixed size of batch_size.
+                                                                # zip * reshapes your list of tuples, to bucket states, actions, and rewards together.
+                                                                # these batches then get wrapped into a PyTorch variable, which contains a tensor and a gradient. 
+                                                                # This format enables PyTorch variables to take in the information.
+        return map(lambda x: Variable(torch.cat(x,0)), samples) # Question: very difficult explanation here
+
+class 
