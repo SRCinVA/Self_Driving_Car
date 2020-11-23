@@ -64,10 +64,21 @@ class ReplayMemory(object):  # Question: what exactly does 'object' refer to her
         return map(lambda x: Variable(torch.cat(x,0)), samples) # Question: very difficult explanation here
 
 class Dqn(): # Implementing Deep Q Learning model
-    def __init__(self, input_size, nb_action, gamma):    #the input_size, the number of possible actions,a nd gamma)
+    def __init__(self, input_size, nb_action, gamma):    #the input_size, the number of possible actions, and gamma)
         self.gamma = gamma
         self.reward_window = []     # a sliding window of the evolving mean of the last 100 rewards
                                     # we initalize reward_window as an empty list
         self.model = Network(input_size, nb_action) # this creates one instance of an NN for the Dqn class (a class within a class, it seems?)
-        self.memory = ReplayMemory(100000) # we'll take 100,000 transitions into memoery and sample them, enabling the model to learn.
-        self.optimizer =optim.Adam(self.model)  # based on torch.optim for stochastic gradient descent
+        self.memory = ReplayMemory(100000) # we'll take 100,000 transitions into memory and sample them, enabling the model to learn.
+        self.optimizer = optim.Adam(self.model.parameters(), lr = 0.001)      # Based on torch.optim for stochastic gradient descent. 'Adam' is one such optimizer and work well for our purposes.
+                                                                                # The arguments are all the paramaters to customize the optimizer.
+                                                                                # We'll pass in self.model, with '.parameters' to accept those parameters. 
+                                                                                # In sum, this line of code connects the Adam optimizer to the neural network.
+                                                                                # lr = learning rate
+        # now we need to build the last three variables composing the transition events:
+        self.last_state = torch.Tensor(input_size).unsqueeze(0)     # min 13-14, highly involved explanation of how batching becomes a "fake" vector for use in PyTorch.
+                                                                    # We need to position the fake dimension as the first index of the last state, using '.unsqueeze'.
+                                                                    # the first dimension [0] is the fake one, and the Tensor from PyTorch will contain the other five.
+                                                                    
+        self.last_action = 0  # We can intialize this just to zero; no need to create a vector here.
+        self.last_reward = 0  # We can initialize this to zero as well.
