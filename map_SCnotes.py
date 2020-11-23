@@ -63,4 +63,11 @@ class ReplayMemory(object):  # Question: what exactly does 'object' refer to her
                                                                 # This format enables PyTorch variables to take in the information.
         return map(lambda x: Variable(torch.cat(x,0)), samples) # Question: very difficult explanation here
 
-class 
+class Dqn(): # Implementing Deep Q Learning model
+    def __init__(self, input_size, nb_action, gamma):    #the input_size, the number of possible actions,a nd gamma)
+        self.gamma = gamma
+        self.reward_window = []     # a sliding window of the evolving mean of the last 100 rewards
+                                    # we initalize reward_window as an empty list
+        self.model = Network(input_size, nb_action) # this creates one instance of an NN for the Dqn class (a class within a class, it seems?)
+        self.memory = ReplayMemory(100000) # we'll take 100,000 transitions into memoery and sample them, enabling the model to learn.
+        self.optimizer =optim.Adam(self.model)  # based on torch.optim for stochastic gradient descent
