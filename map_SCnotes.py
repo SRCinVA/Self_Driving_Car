@@ -82,3 +82,14 @@ class Dqn(): # Implementing Deep Q Learning model
                                                                     
         self.last_action = 0  # We can intialize this just to zero; no need to create a vector here.
         self.last_reward = 0  # We can initialize this to zero as well.
+
+    def select_action(self, state): # 'state' is in fact the output of the neural network (the Q-values of the three possible actions) 
+        probs = F.softmax(self.model(Variable(state, volatile = True))*7)   # the Softmax fucntion goes for the optimum outcome while allowing exploration (by alloting a high probability to the highest Q-value).
+                            # Notice that the Softmax function lives in the 'F' module in PyTorch
+                            # For the Softmax function, we input the entities for which we want to generate the probablity distribution (the Q values).
+                            # Now, all we have to do to make that happen is input the model.
+                            # 'state' is a torch tensor, which we'll convert into a variable (Question: why?)
+                            # Incomprehensible explanation for 'volatile = True' at around 8:16 in Step 10 video.
+                            # the temperature parameter helps the NN decide which action to take.
+                            # it's positive number; the higher it is, the likelier it is the car will following the winning Q-value.
+                            # 
