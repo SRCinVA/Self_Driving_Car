@@ -92,4 +92,10 @@ class Dqn(): # Implementing Deep Q Learning model
                             # Incomprehensible explanation for 'volatile = True' at around 8:16 in Step 10 video.
                             # the temperature parameter helps the NN decide which action to take.
                             # it's positive number; the higher it is, the likelier it is the car will following the winning Q-value.
-                            # 
+                            # Question: his Softmax explanation at ~10 did not clearly explain how the temperature interacts with the Q-values.
+                            # Question: is there a maximum temperature parameter?
+        # We make a random drawing from the distribution to get an action
+        action = probs.multinomial()    # Question: essentially 0 explanantion on what the multinomial is.
+        return action.data[0,0]         # This will produce an action of 0, 1, or 2. Also no explananation on this one, either.
+                                        # In summary: the select_action function will tell the AI which action to select each time.
+    
