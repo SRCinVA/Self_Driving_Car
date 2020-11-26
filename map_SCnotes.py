@@ -99,3 +99,11 @@ class Dqn(): # Implementing Deep Q Learning model
         return action.data[0,0]         # This will produce an action of 0, 1, or 2. Also no explananation on this one, either.
                                         # In summary: the select_action function will tell the AI which action to select each time.
     
+    # for forward- and back-propogation
+    def learn(self, batch_state, batch_next_state, batch_reward, batch_action): # this represents a transition of the Markov decision process. At 2:05, glossed-over explanation of how they reflect the states.
+                                                                                # this relates closely to using experience replay as a way of teaching the nn what to do.
+        outputs = self.model(batch_state).gather(1, batch_action.unsqueeze(1))  # we want to get the output of the model using the inputs (Question: what does he man by 'model's output' at 3:15. Very hand-wavy explanation.)
+                                                                                # .gather(1, batch_action) pulls out only the action that we will actually take (i.e., the best action for each batch state.)
+                                                                                # notice that we needed the .unsqueeze() function because it's attached to the batch state (Question: why is that the case?)
+                                                                                # batch_state and batch_action need to be of the same dimension.
+                                                                                # Then we have to squeeze it again (hand-wavey explanation here as well).
