@@ -109,3 +109,6 @@ class Dqn(): # Implementing Deep Q Learning model
         next_outputs = self.model(batch_next_state).detach().max(1)[0]          # at 7:00 in tutorial 11, referred to the AI handbook ("How To Build an AI") for the math behind it.
                                                                                 # Question: why the .detach function??
                                                                                 # We take the mox of the Q-values, which is represented by state [1].
+                                                                                # [0] gives us the maximum Q-value of the next state (refers to the paper for mathematical backing).  
+        target = self.gamma*next_outputs + batch_reward                         # again, referred back to the handbook for the math.                                             
+        td_loss = F.smooth_l1_loss(outputs, target)                             # mind-boggling explanation here.                                         # this comes from the F function; Hadelin recommends Huber Loss for Deep Q-Learning.
