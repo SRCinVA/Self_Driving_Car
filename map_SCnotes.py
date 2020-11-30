@@ -102,7 +102,8 @@ class Dqn(): # Implementing Deep Q Learning model
     # for forward- and back-propogation
     def learn(self, batch_state, batch_next_state, batch_reward, batch_action): # this represents a transition of the Markov decision process. At 2:05, glossed-over explanation of how they reflect the states.
                                                                                 # this relates closely to using experience replay as a way of teaching the nn what to do.
-        outputs = self.model(batch_state).gather(1, batch_action.unsqueeze(1))  # we want to get the output of the model using the inputs (Question: what does he man by 'model's output' at 3:15. Very hand-wavy explanation.)                                                                     # .gather(1, batch_action) pulls out only the action that we will actually take (i.e., the best action for each batch state.)
+        outputs = self.model(batch_state).gather(1, batch_action.unsqueeze(1))  # we want to get the output of the model using the inputs (Question: what does he man by 'model's output' at 3:15. Very hand-wavy explanation.)                                                                     
+                                                                                # .gather(1, batch_action) pulls out only the action that we will actually take (i.e., the best action for each batch state.)
                                                                                 # notice that we needed the .unsqueeze() function because it's attached to the batch state (Question: why is that the case?)
                                                                                 # batch_state and batch_action need to be of the same dimension.
                                                                                 # Then we have to squeeze it again (hand-wavey explanation here as well).
@@ -115,6 +116,15 @@ class Dqn(): # Implementing Deep Q Learning model
                                                                                 # this comes from the F function; Hadelin recommends Huber Loss for Deep Q-Learning.
                                                                                 # we need to input our predictions (the outputs of the neural network) and the targets (what we are trying to get.)
                                                                                 # this fucntion enables us to back-propogate the error in the NN so the weights can be adjusted with stochastic gradietn descent.
-        self.optimizer                                              # we use the Adam optimizer we initialized earlier (we've already fitted it with the paramaters and given it a learning rate.)
-                                                                    # we need to apply the optimizer to the last error to perform stochastic gradient descnet and to update the weights.
+                                                                                # we need to use the Adam optimizer we initialized earlier (we've already fitted it with the paramaters and given it a learning rate.)
+                                                                                # now that we have the last error, we can back-propagate this last error back to the NN to update the weights with stochastic gradient descent.
 
+        self.optimizer.zero_grad()                                              # we need to use the Adam optimizer we initialized earlier (we've already fitted it with the paramaters and given it a learning rate.)
+                                                                                # we need to re-initialize the optimizer at each iteration of the loop of the stochastic gradient descent. To accomplish this, we use the zero_grad method.
+                                                                                # Now that the optimizer has been re-initialized, it can be used to perform backward propogation. 
+        td_loss.backward(retain_variables=True)                                 # To perform back-propagation, we take the td_loss and then use the .backward function. The use 'retain_variables = True' frees up some memory, which we need b/c we'll "go several times on the loss" (question: huh?). That will improve the training perfomance.
+        
+        # Lastly, we have to update the weights according to the back-propogation (i.e., according to how much the weights contributed to the error).
+        self.optimizer.step()                                                   # to do this, we take the optimizer (which has been initialized and re-initialized) and apply the step function. This line of code updates the weights.
+                                                                                
+    def update()
