@@ -111,4 +111,10 @@ class Dqn(): # Implementing Deep Q Learning model
                                                                                 # We take the mox of the Q-values, which is represented by state [1].
                                                                                 # [0] gives us the maximum Q-value of the next state (refers to the paper for mathematical backing).  
         target = self.gamma*next_outputs + batch_reward                         # again, referred back to the handbook for the math.                                             
-        td_loss = F.smooth_l1_loss(outputs, target)                             # mind-boggling explanation here.                                         # this comes from the F function; Hadelin recommends Huber Loss for Deep Q-Learning.
+        td_loss = F.smooth_l1_loss(outputs, target)                             # mind-boggling explanation here.                                         
+                                                                                # this comes from the F function; Hadelin recommends Huber Loss for Deep Q-Learning.
+                                                                                # we need to input our predictions (the outputs of the neural network) and the targets (what we are trying to get.)
+                                                                                # this fucntion enables us to back-propogate the error in the NN so the weights can be adjusted with stochastic gradietn descent.
+        self.optimizer                                              # we use the Adam optimizer we initialized earlier (we've already fitted it with the paramaters and given it a learning rate.)
+                                                                    # we need to apply the optimizer to the last error to perform stochastic gradient descnet and to update the weights.
+
