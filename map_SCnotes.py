@@ -127,4 +127,13 @@ class Dqn(): # Implementing Deep Q Learning model
         # Lastly, we have to update the weights according to the back-propogation (i.e., according to how much the weights contributed to the error).
         self.optimizer.step()                                                   # to do this, we take the optimizer (which has been initialized and re-initialized) and apply the step function. This line of code updates the weights.
                                                                                 
-    def update()
+    # def update () will update everything there is to update as soon as the AI reaches the new state (in terms of actions, states, and rewards). 
+    # in other words, we have to update all of the transitions that happened.
+    # we'll have to append this new transition to the memory;
+    # will need to update the reward window to keep track of how the training and exploration are going.
+    # now, we can make a connection between the AI we are building and the game itself.
+    def update (reward, new_signal):
+        new_state = torch.Tensor(new_signal).float().unsqueeze(0)               # the state is the signal itself, but just a list of 5 elements (input of the sensors and the plus and minus orientations).
+                                                                                # these five signals need to be turned into a torch tensor.
+                                                                                # then they need to be converted into floats.
+                                                                                # lastly, we have to add the "fake" dimension corresponding the batch (which is index [0])
