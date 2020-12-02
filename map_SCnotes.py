@@ -132,8 +132,15 @@ class Dqn(): # Implementing Deep Q Learning model
     # we'll have to append this new transition to the memory;
     # will need to update the reward window to keep track of how the training and exploration are going.
     # now, we can make a connection between the AI we are building and the game itself.
-    def update (reward, new_signal):
+    def update (self, reward, new_signal):
         new_state = torch.Tensor(new_signal).float().unsqueeze(0)               # the state is the signal itself, but just a list of 5 elements (input of the sensors and the plus and minus orientations).
                                                                                 # these five signals need to be turned into a torch tensor.
                                                                                 # then they need to be converted into floats.
                                                                                 # lastly, we have to add the "fake" dimension corresponding the batch (which is index [0])
+        # having reached the new state and all of the components (state, new state, reward, batch), now we have to update the memory.
+        # we have to append this new transition to the memory.
+        # the Push function we defined earlier does this for us; we'll use it to append our new event (transition) to the memory.
+        self.memory.push(self.last_state, new_state, torch.LongTensor(self.last_action))        # notice that last_state exists in the __init__ function.
+                                                                                # all of the elements here should be TorchTensors
+                                                                                # Strangely, you can convert integers into "long tensors"
+
