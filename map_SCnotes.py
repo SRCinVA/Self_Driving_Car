@@ -153,3 +153,25 @@ class Dqn(): # Implementing Deep Q Learning model
         # we take 100 random samples from the memory.
         if memory(self.memory.memory) > 100:    # the first 'memory' is the object of the replay_memory class;
                                                 # the second 'memory' is an attribute of the __init__ class (earlier in the code).
+            
+            # we get the random samples from the sample function above. 
+            # Coincidentally, we can just take all the variables of the learn function (shown below).
+            # those four are the variables that the sample function needs to take in.
+            batch_state, batch_next_state, batch_reward, batch_action = self.memory.sample(100) # 'sample' here is the method. 
+            # we need to access the 'learn' class through the future objects that will be created by the Dqn class.
+            self.learn(batch_state, batch_next_state, batch_reward, batch_action) # the learning will happen from these random batches. 
+            
+            # after reaching a new state and performing an action, we still have to update the last_action variable to reflect what it just did.
+            self.last_action = action
+            # same reasoning for this one--the state needs to be updated.
+            self.last_state = new_state
+            # same reasoning here, as well.
+            self.reward
+            # need to update reward_window (a sliding window assessing how the training is going.) It is a fixed, sliding window.
+            self.reward_window.append(reward)
+            if len(self.reward_window) > 1000: # this ensures that the reward window never grows to more than 1000 elements (the mean of the last 100 rewards)
+                del self.reward_window[0]
+            return action   # this makes the action that was performed available to outside of 'update' after it has run.
+                            # that action then gets used to update the brain (earlier in the code, action = brain.update). 
+
+            
