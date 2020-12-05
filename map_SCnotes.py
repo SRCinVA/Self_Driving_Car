@@ -140,10 +140,16 @@ class Dqn(): # Implementing Deep Q Learning model
         # having reached the new state and all of the components (state, new state, reward, batch), now we have to update the memory.
         # we have to append this new transition to the memory.
         # the Push function we defined earlier does this for us; we'll use it to append our new event (transition) to the memory.
-        self.memory.push(self.last_state, new_state, torch.LongTensor([int(self.last_action)], torch.Tensor([self.last_reward]))        # notice that last_state exists in the __init__ function.
+        self.memory.push((self.last_state, new_state, torch.LongTensor([int(self.last_action)]), torch.Tensor([self.last_reward])))        # notice that last_state exists in the __init__ function.
                                                                                 # All of the elements here should be TorchTensors
                                                                                 # You can convert integers into a "long tensor" object, which is what will happen with self.last_action, and it will still contain 0, 1, or 2.
                                                                                 # We re-cast self.last_action as an int ensure that it's really an int.
                                                                                 # Putting it in brackets makes it a long tensor of one element.
                                                                                 # lastly, we need to push the last_reward into the memory.
                                                                                 # The reward is a float, not an int. Might have to re-impose torch.Tensor on self.last_reward to put it into a list, but unclear from explanation.
+        # now we have to perform an action, so take in def select_action
+        action = self.select_action(new_state) # here, we perform the new action after reaching the new state.
+        # now, the AI needs to start learning from the last 100 events.
+        # we take 100 random samples from the memory.
+        if memory(self.memory.memory) > 100:    # the first 'memory' is the object of the replay_memory class;
+                                                # the second 'memory' is an attribute of the __init__ class (earlier in the code).
