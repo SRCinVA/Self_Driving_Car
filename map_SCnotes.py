@@ -174,4 +174,6 @@ class Dqn(): # Implementing Deep Q Learning model
             return action   # this makes the action that was performed available to outside of 'update' after it has run.
                             # that action then gets used to update the brain (earlier in the code, action = brain.update). 
 
-            
+    def score(self):        # here, we'll calculate the score on the sliding window of rewards, computing the means of the reward in the reward window.
+        return sum(self.reward_window)/(len(reward_window) + 1.)  # adding the "+1" ensures that the denominator will never be 0 (which could crash your system). 
+        
