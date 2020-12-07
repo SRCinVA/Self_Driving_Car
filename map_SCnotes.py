@@ -177,3 +177,14 @@ class Dqn(): # Implementing Deep Q Learning model
     def score(self):        # here, we'll calculate the score on the sliding window of rewards, computing the means of the reward in the reward window.
         return sum(self.reward_window)/(len(reward_window) + 1.)  # adding the "+1" ensures that the denominator will never be 0 (which could crash your system). 
         
+    def save(self):     # here, we're not going to save the whole model, but we'll save the neural network (self.model) and the optimizer (self.optimizer).
+                        # the goal with saving the model is to save the last weights that were updated in the last iteration, because they will help us predict the results the next time around.
+                        # the optimizer is connected to these weights, as well.
+
+        torch.save({'state_dict': self.model.state_dict(),      # we'll save these two separate objects in a Python dictionary.
+                    'optimizer': self.optimizer.state_dict      # we'll use the 'save' function from the torch module.
+                    }, 'last_brain.pth')                        # the first key-value pair saves the parameters of your model (he probably means your instance of the NN) to that key, then the optimizer.
+                                                                # 'last_brain.pth' is where both of these objects will be saved.
+                                                                # Question: what's with the .state_dict() in the value pairs? Why state_dict() for the optimizer?
+        
+    def load()
