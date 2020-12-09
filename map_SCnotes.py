@@ -187,4 +187,16 @@ class Dqn(): # Implementing Deep Q Learning model
                                                                 # 'last_brain.pth' is where both of these objects will be saved.
                                                                 # Question: what's with the .state_dict() in the value pairs? Why state_dict() for the optimizer?
         
-    def load()
+    def load(self):
+        if os.path.isfile('last_brain.pth'):     # we need to be sure the brain still exists.
+            print("=> loading checkpoint ...")
+            checkpoint = torch.load('last_brain.pth')  #we're going to the model and the optimizer (together, the brain) in 'checkpoint.'
+            
+            # now we need to separately update the existing model and optimizer with the updated weights and parameters (that's what load_state_dict does).
+            # we enter state_dict and optimizer, b/c those keys are the components of the brain.
+            self.model.load_state_dict(checkpoint['state_dict'])   
+            self.optimizer.load_state_dict(checkpoint['optimizer'])
+            print("done!")
+        else:
+            print("no checkpoint found ...")
+
